@@ -32,7 +32,7 @@ Antes de comenzar a utilizar esta plantilla, asegúrate de tener instalado:
 2. Navega a la carpeta del proyecto:
 
     ```bash
-    cd argon
+    cd nahui
     ```
 
 3. Instala las dependencias PHP usando Composer:
