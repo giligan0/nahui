@@ -107,7 +107,7 @@ const goToPlace = (lugar) => {
     input {
       width: 100%;
       padding: 0.8rem 2.5rem 0.8rem 1rem;
-      border: 1px solid #ccc;
+      box-shadow: 2px 1px 3px #979595;
       border-radius: 8px;
       font-size: 1rem;
       outline: none;
