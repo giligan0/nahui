@@ -31,7 +31,7 @@ class OrganizationController extends Controller
     public function store(OrganizationRequest $request)
     {
         Organization::create ($request->validated());
-        return redirect()->route('organizations.index')->with('success','Organización creado con éxito');
+        return redirect()->route('organizations.index')->with('success','Organización creada con éxito');
     }
 
     /**
@@ -39,8 +39,8 @@ class OrganizationController extends Controller
      */
     public function show(int $id)
     {
-        $organizations= Customer::find($id);
-        return view('customers.show',compact('customers'));
+        $organizations= Organization::find($id);
+        return view('organizations.show',compact('organizations'));
     }
 
     /**
@@ -48,18 +48,18 @@ class OrganizationController extends Controller
      */
     public function edit(int $id)
     {
-        $customers= Customer::find($id);
-        return view ('customers.edit',compact('customers'));
+        $organizations= Organization::find($id);
+        return view ('Organizations.edit',compact('organizations'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(CustomerRequest $request, int $id)
+    public function update(OrganizationRequest $request, int $id)
     {
-        $customers= Customer::find($id);
-        $customers->update($request->validated());
-        return redirect()->route('customers.index')->with('updated','Cliente actualizado con éxito');
+        $organizations= Organization::find($id);
+        $organizations->update($request->validated());
+        return redirect()->route('organizations.index')->with('updated','Organización actualizada con éxito');
     }
 
     /**
@@ -67,9 +67,9 @@ class OrganizationController extends Controller
      */
     public function destroy(int $id)
     {
-        $customers= Customer::find($id);
-        $customers->delete();
-        return redirect()->route('customers.index')->with('deleted','Cliente eliminado con éxito');
+        $organizations= Organization::find($id);
+        $organizations->delete();
+        return redirect()->route('organizations.index')->with('deleted','Organización eliminado con éxito');
     }
 }
 
