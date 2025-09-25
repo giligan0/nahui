@@ -12,5 +12,5 @@ class Organization extends Model
         'contact_info',
         'address',
         'website',
-    ];
+    ];  
 }
