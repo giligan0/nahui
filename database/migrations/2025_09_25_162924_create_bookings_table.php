@@ -15,9 +15,16 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('accommodation_id')->constrained('accommodations')->cascadeOnDelete();
-            // to do
-            
+            $table->date('start_date');
+            $table->date('end_date'); // end_date means the day they leave (exclusive)
+            $table->unsignedTinyInteger('guests');
+            $table->decimal('total_price', 10, 2);
+            $table->char('currency', 3)->default('USD');
+            $table->enum('status', ['confirmed', 'cancelled', 'completed'])->default('confirmed');
             $table->timestamps();
+            $table->softDeletes();
+            $table->check('end_date > start_date');
+            $table->index(['accommodation_id', 'start_date', 'end_date']);
         });
     }
 
