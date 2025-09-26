@@ -31,7 +31,7 @@ class OrganizationController extends Controller
     public function store(OrganizationRequest $request)
     {
         Organization::create ($request->validated());
-        return redirect()->route('organizations.index')->with('success','Organización creada con éxito');
+        return redirect()->route('organizations.index')->with('success','Organización ha sido creada con éxito');
     }
 
     /**
@@ -59,7 +59,7 @@ class OrganizationController extends Controller
     {
         $organizations= Organization::find($id);
         $organizations->update($request->validated());
-        return redirect()->route('organizations.index')->with('updated','Organización actualizada con éxito');
+        return redirect()->route('organizations.index')->with('updated','Organización ha sido actualizado con éxito');
     }
 
     /**
@@ -69,7 +69,7 @@ class OrganizationController extends Controller
     {
         $organizations= Organization::find($id);
         $organizations->delete();
-        return redirect()->route('organizations.index')->with('deleted','Organización eliminado con éxito');
+        return redirect()->route('organizations.index')->with('deleted','Organización ha sido eliminado con éxito');
     }
 }
 

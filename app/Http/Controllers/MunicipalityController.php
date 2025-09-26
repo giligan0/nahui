@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Municipality;
 
 class MunicipalityController extends Controller
 {
@@ -61,7 +62,7 @@ class MunicipalityController extends Controller
     public function update(MunicipalityRequest $request, int $id)
     {
         $municipalities= Municipality::find($id);
-        $departments->update($request->validated());
+        $municipalities->update($request->validated());
         return redirect()->route('municipalities.index')->with('updated','Municipio ha sido actualizado con éxito');
     }
 

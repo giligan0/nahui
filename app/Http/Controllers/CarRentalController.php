@@ -44,7 +44,7 @@ class CarRentalController extends Controller
     {
         $carrentals= Carrental::find($id);
         $organizations= Organization::all();
-        return view ('carrental.show',compact('carrentals','organizations'));
+        return view ('carrentals.show',compact('carrentals','organizations'));
     }
 
     /**
@@ -61,7 +61,7 @@ class CarRentalController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(BillingRequest $request, int $id)
+    public function update(CarrentalRequest $request, int $id)
     {
         $carrentals= Carrental::find($id);
         $carrentals->update($request->validated());

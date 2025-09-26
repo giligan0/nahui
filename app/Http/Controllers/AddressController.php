@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 class AddressController extends Controller
 {
-{
     /**
      * Display a listing of the resource.
      */
@@ -71,6 +70,5 @@ class AddressController extends Controller
         $addresses->delete();
         return redirect()->route('addresses.index')->with('success','Dirección ha sido eliminado con éxito');
     }
-}
 
 }
