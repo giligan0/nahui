@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
+            // reviewable missing
             $table->unsignedTinyInteger('rating');
             $table->string('title', 100)->nullable();
             $table->text('comment')->nullable();
