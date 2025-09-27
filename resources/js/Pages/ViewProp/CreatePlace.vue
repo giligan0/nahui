@@ -110,7 +110,7 @@ const marcarDisponible = () => {
 
     <!-- Información básica -->
     <div class="section">
-      <h3 class="sub_title tittle_public">Información básica</h3>
+      <h3 class="sub_title tittle">Información básica</h3>
       <div class="form-grid">
         <input v-model="nombre" placeholder="Nombre del alojamiento" />
         <select v-model="categoria">
@@ -125,14 +125,14 @@ const marcarDisponible = () => {
 
     <!-- Ubicación -->
     <div class="section">
-      <h3 class="sub_title tittle_public">Ubicación</h3>
+      <h3 class="sub_title tittle">Ubicación</h3>
       <input v-model="coordenadas" placeholder="Coordenadas: lat, lng" />
       <div class="mapa">[Mapa aquí]</div>
     </div>
 
     <!-- Características -->
     <div class="section">
-      <h3 class="sub_title tittle_public">Características del alojamiento</h3>
+      <h3 class="sub_title tittle">Características del alojamiento</h3>
       <div class="form-grid">
         <input v-model="servicios" placeholder="Servicios incluidos" />
         <input v-model="habitaciones" placeholder="Número de habitaciones" />
@@ -142,7 +142,7 @@ const marcarDisponible = () => {
 
     <!-- Reglas -->
     <div class="section section_reglas">
-        <h3 class="sub_title tittle_public" for="">Reglas y consideraciones</h3>
+        <h3 class="sub_title tittle" for="">Reglas y consideraciones</h3>
             <textarea rows="4" cols="4" class="text_area_description" v-model="descripcion" placeholder="Descripción"></textarea>
     </div>
 
@@ -172,7 +172,7 @@ const marcarDisponible = () => {
     </div>
 
  <!-- Disponibilidad -->
- <h3 class="sub_title tittle_public">Disponibilidad</h3>
+ <h3 class="sub_title tittle">Disponibilidad</h3>
   <div class="section section_calendar">
 
 
@@ -206,7 +206,7 @@ const marcarDisponible = () => {
 
     <!-- Publicar -->
     <div class="section publicar">
-      <h3 class="sub_title tittle_public">Publicar</h3>
+      <h3 class="sub_title tittle">Publicar</h3>
       <p>Al publicar, tu contenido podrá ser visto por los usuarios.</p>
       <button class="btn btn-publicar">Publicar alojamiento</button>
     </div>
