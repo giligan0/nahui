@@ -31,13 +31,17 @@ Route::middleware('auth')->group(function () {
     Route::resource('/reviews',\App\Http\Controllers\ReviewController::class);
 
 
+    
+  Route::get('/createplace', function () {
+    return Inertia::render('ViewProp/CreatePlace');
+})->name('createplace');
 
     Route::get('/home', function () {
-        return Inertia::render('principal/principal');
+        return Inertia::render('ViewUser/principal/principal');
     })->name('home');
 
     Route::get('/place', function () {
-        return Inertia::render('Place');
+        return Inertia::render('ViewUser/Place');
     })->name('place');
 
     Route::get('/transporte', function () {
@@ -47,12 +51,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/mapa', function () {
         return Inertia::render('Mapa');
     })->name('mapa');
+    
+
 
 
     // TODO RUTAS GENERALES
 
         Route::get('/location', function () {
-        return Inertia::render('Location_info/Location_info');
+        return Inertia::render('ViewUser/Location_info/Location_info');
     })->name('location');
 
 
