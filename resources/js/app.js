@@ -13,6 +13,9 @@ import { faEye, faBars, faBell, faUserCircle, faSearch } from '@fortawesome/free
 //TODO DECLARAMOS NUESTROS ESTILOS 
 
 import '../js/scss/Principal.scss'
+import '../js/scss/Variables.scss'
+import '../js/scss/UserStyle/location.scss'
+import '../js/scss/ViewProp/CreatePlace.scss'
 
 
 
