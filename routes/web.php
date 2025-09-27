@@ -13,7 +13,7 @@ Route::get('/register', function () {
     return Inertia::render('Auth/Register');
 })->name('register');
 
-//TODO PÁGINAS PRINCIPALES (autenticadas)
+//TODO PÁGINAS PRINCIPALES (autenticadas) MENU
 Route::middleware('auth')->group(function () {
     Route::get('/home', function () {
         return Inertia::render('principal/principal');
@@ -30,6 +30,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/mapa', function () {
         return Inertia::render('Mapa');
     })->name('mapa');
+
+
+    // TODO RUTAS GENERALES
+
+        Route::get('/location', function () {
+        return Inertia::render('Location_info/Location_info');
+    })->name('location');
+
+
+    
 
     // PERFIL DE USUARIO
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
