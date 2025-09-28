@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::create('shapes', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->foreignId('route_id')->constrained('bus_routes')->cascadeOnDelete();
-            $table->geometry('path'); // TODO: convert to lineString SRID 4326 in future migration
+            $table->geometry('path'); // TODO: this method supports srid
             $table->decimal('length_km', 8, 2)->nullable();
             $table->boolean('is_primary')->default(true)->index();
             $table->timestamps();

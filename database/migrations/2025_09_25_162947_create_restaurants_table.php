@@ -21,7 +21,7 @@ return new class extends Migration
             $table->json('hours')->nullable(); // JSON schema: {timezone, regular{mon..sun:[{open,close}]}, exceptions:[{date, open, close, closed?}]}
             // $table->json('payment_methods')->nullable(); // tabla aparte
             $table->boolean('reservations_supported')->default(false)->index();
-            $table->foreignId('address_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('address_id')->constrained();
             $table->timestamps();
             $table->softDeletes();
             $table->index(['restaurant_category_id', 'reservations_supported']);

@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // An address row should be deleted when nothing references it
         Schema::create('addresses', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->foreignId('municipality_id')->constrained()->restrictOnDelete();
