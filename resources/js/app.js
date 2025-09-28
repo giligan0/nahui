@@ -8,18 +8,25 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faEye, faBars, faBell, faUserCircle, faSearch } from '@fortawesome/free-solid-svg-icons'; 
+import { faEye, faBars, faBell, faUserCircle, faSearch } from '@fortawesome/free-solid-svg-icons';
 
-//TODO DECLARAMOS NUESTROS ESTILOS 
+// LIBRERIA PARA EL MAPA
+import 'leaflet/dist/leaflet.css';
+
+// IMPORTANDO FONT AWESOME PARA LOS ICONOS
+import '@fortawesome/fontawesome-free/css/all.min.css';
+
+//TODO DECLARAMOS NUESTROS ESTILOS
 
 import '../js/scss/Principal.scss'
+import '../js/scss/UserStyle/Mapa.scss'
 import '../js/scss/Variables.scss'
 import '../js/scss/UserStyle/location.scss'
 import '../js/scss/ViewProp/CreatePlace.scss'
 
 
 
-//TODO FIN DE DECLARAMOS NUESTROS ESTILOS 
+//TODO FIN DE DECLARAMOS NUESTROS ESTILOS
 library.add(faEye, faBars, faBell, faUserCircle, faSearch); // agrega todos los íconos que quieras
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
@@ -36,7 +43,7 @@ createInertiaApp({
 
         app.use(plugin)
            .use(ZiggyVue)
-           .component('font-awesome-icon', FontAwesomeIcon) 
+           .component('font-awesome-icon', FontAwesomeIcon)
            .mount(el);
 
         return app;
