@@ -4,25 +4,45 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class BookingDay
+ *
+ * @property $booking_id
+ * @property $accommodation_id
+ * @property $day
+ *
+ * @property Accommodation $accommodation
+ * @property Booking $booking
+ * @package App
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ */
 class BookingDay extends Model
 {
-    public $timestamps = false; // managed by booking
+    
+    protected $perPage = 20;
 
-    protected $fillable = [
-        'booking_id', 'accommodation_id', 'day'
-    ];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = ['booking_id', 'accommodation_id', 'day'];
 
-    protected $casts = [
-        'day' => 'date'
-    ];
 
-    public function booking()
-    {
-        return $this->belongsTo(Booking::class);
-    }
-
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function accommodation()
     {
-        return $this->belongsTo(Accommodation::class);
+        return $this->belongsTo(\App\Models\Accommodation::class, 'accommodation_id', 'id');
     }
+    
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function booking()
+    {
+        return $this->belongsTo(\App\Models\Booking::class, 'booking_id', 'id');
+    }
+    
 }
