@@ -18,6 +18,7 @@ return new class extends Migration
             $table->char('currency', 3)->nullable();
             $table->timestamps();
             $table->primary(['restaurant_id', 'dish_id']);
+            $table->index('dish_id');
         });
     }
 

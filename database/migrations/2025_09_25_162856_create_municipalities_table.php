@@ -16,8 +16,7 @@ return new class extends Migration
             $table->foreignId('department_id')->constrained()->restrictOnDelete();
             $table->string('name');
             $table->timestamps();
-            $table->unique(['department_id', 'name']);
-            $table->index('department_id');
+            $table->unique(['department_id', 'name']); // composite covers department_id lookups
         });
     }
 

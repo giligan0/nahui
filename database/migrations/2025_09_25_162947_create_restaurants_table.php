@@ -18,10 +18,10 @@ return new class extends Migration
             $table->json('cuisine_types')->nullable();
             $table->text('description')->nullable();
             $table->string('price_band', 10)->nullable();
-            $table->json('hours')->nullable();
-            $table->json('payment_methods')->nullable(); // tabla aparte
+            $table->json('hours')->nullable(); // JSON schema: {timezone, regular{mon..sun:[{open,close}]}, exceptions:[{date, open, close, closed?}]}
+            // $table->json('payment_methods')->nullable(); // tabla aparte
             $table->boolean('reservations_supported')->default(false)->index();
-            $table->foreignId('address_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('address_id')->constrained();
             $table->timestamps();
             $table->softDeletes();
             $table->index(['restaurant_category_id', 'reservations_supported']);

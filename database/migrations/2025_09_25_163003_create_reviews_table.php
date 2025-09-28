@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -13,16 +14,28 @@ return new class extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
+            // add cascade on delete
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            // Polymorphic relation to any reviewable model (e.g., Place, Restaurant, Event, etc.)
+            $table->morphs('reviewable'); // creates unsignedBigInteger reviewable_id & string reviewable_type + index
             $table->unsignedTinyInteger('rating');
             $table->string('title', 100)->nullable();
             $table->text('comment')->nullable();
             $table->timestamps();
             $table->softDeletes();
+            $table->unique(['user_id','reviewable_type','reviewable_id','deleted_at']);
             $table->index(['reviewable_type', 'reviewable_id', 'created_at']);
-            $table->index(['user_id', 'reviewable_type', 'reviewable_id']);
-            $table->check('rating >= 1 AND rating <= 5');
+            // Add rating range constraint via raw statement after table creation
         });
+
+        $driver = DB::getDriverName();
+        if ($driver !== 'sqlite') {
+            try {
+                DB::statement('ALTER TABLE reviews ADD CONSTRAINT chk_reviews_rating CHECK (rating >= 1 AND rating <= 5)');
+            } catch (\Throwable $e) {
+                // ignore
+            }
+        }
     }
 
     /**
