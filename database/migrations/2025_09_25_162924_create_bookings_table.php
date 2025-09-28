@@ -20,11 +20,13 @@ return new class extends Migration
             $table->unsignedTinyInteger('guests');
             $table->decimal('total_price', 10, 2);
             $table->char('currency', 3)->default('USD');
-            $table->enum('status', ['confirmed', 'cancelled', 'completed'])->default('confirmed');
+            // status values: confirmed, cancelled, completed
+            $table->string('status', 20)->default('confirmed')->index();
             $table->timestamps();
             $table->softDeletes();
             $table->check('end_date > start_date');
             $table->index(['accommodation_id', 'start_date', 'end_date']);
+            $table->index(['accommodation_id', 'status', 'start_date']);
         });
     }
 

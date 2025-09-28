@@ -19,14 +19,19 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->dateTime('start_at');
             $table->dateTime('end_at');
-            $table->enum('recurrence', ['none', 'annual', 'weekly', 'monthly'])->default('none')->index(); // traducir enums
+            // recurrence values: none, annual, weekly, monthly (stored as string for flexibility / i18n)
+            $table->string('recurrence', 20)->default('none')->index();
             $table->foreignId('address_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('place_id')->nullable()->constrained('places')->nullOnDelete();
             $table->decimal('cost', 10, 2)->nullable();
             $table->char('currency', 3)->nullable();
             $table->timestamps();
             $table->softDeletes();
-            $table->index(['event_category_id', 'recurrence', 'start_at', 'end_at', 'place_id', 'address_id']);
+            // Replacing overly wide composite index with smaller targeted ones for common query patterns
+            $table->index(['start_at']);
+            $table->index(['event_category_id', 'start_at']);
+            $table->index(['place_id', 'start_at']);
+            $table->index(['recurrence', 'start_at']);
             $table->check('(end_at IS NULL OR end_at >= start_at)');
         });
     }

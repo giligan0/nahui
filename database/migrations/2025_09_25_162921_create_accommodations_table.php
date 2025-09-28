@@ -26,13 +26,16 @@ return new class extends Migration
             $table->boolean('dogs_allowed')->default(true);
             $table->decimal('base_price', 10, 2)->nullable();
             $table->char('currency', 3)->nullable();
-            $table->enum('status', ['active', 'inactive'])->default('active')->index();
+            // status values: active, inactive (stored as plain string for flexibility)
+            $table->string('status', 20)->default('active')->index();
             $table->timestamp('posted_at')->nullable()->index();
             $table->unsignedBigInteger('view_count')->default(0);
             $table->timestamps();
             $table->softDeletes();
             $table->index(['accommodation_type_id', 'status']);
             $table->index(['status', 'base_price']);
+            // frequent listing: newest active
+            $table->index(['status', 'posted_at']);
         });
     }
 
