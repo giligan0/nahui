@@ -5,8 +5,8 @@
 </template>
 
 <script setup>
-import Dashboard from "../ViewUser/Dashboard.vue";
-import MainDash from "../ViewUser/MainDash.vue";
+import Dashboard from "../Dashboard.vue";
+import MainDash from "../MainDash.vue";
 
     Dashboard
     MainDash

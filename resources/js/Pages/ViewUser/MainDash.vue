@@ -34,10 +34,10 @@
 </template>
 
 <script setup>
-import primera from "../Pages/Multimedia/primeraimg.png"; // usa tu imagen real aquí
-import segunda from "../Pages/Multimedia/palmera1.png"; // usa tu imagen real aquí
-import tercera from "../Pages/Multimedia/catedral.png"; // usa tu imagen real aquí
-import cuarta from "../Pages/Multimedia/catedragrande.png"; // usa tu imagen real aquí
+import primera from "../Multimedia/primeraimg.png"; // usa tu imagen real aquí
+import segunda from "../Multimedia/palmera1.png"; // usa tu imagen real aquí
+import tercera from "../Multimedia/catedral.png"; // usa tu imagen real aquí
+import cuarta from "../Multimedia/catedragrande.png"; // usa tu imagen real aquí
 </script>
 
 <style lang="scss" scoped>
