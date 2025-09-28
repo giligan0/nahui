@@ -12,8 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('interest_user', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('interest_id')->constrained()->cascadeOnDelete();
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedInteger('interest_id');
+            $table->foreign('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreign('interest_id')->references('id')->on('interests')->cascadeOnDelete();
             $table->primary(['user_id', 'interest_id']);
             $table->index(['interest_id', 'user_id']);
             $table->timestamps();
