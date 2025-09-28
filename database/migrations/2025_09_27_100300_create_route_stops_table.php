@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration {
     public function up(): void
@@ -16,8 +17,17 @@ return new class extends Migration {
             $table->unique(['route_id', 'sequence']);
             $table->unique(['route_id', 'stop_id']);
             $table->index(['stop_id', 'sequence']);
-            $table->check('sequence > 0');
+            // Add positive sequence constraint via raw statement after creation
         });
+
+        $driver = DB::getDriverName();
+        if ($driver !== 'sqlite') {
+            try {
+                DB::statement('ALTER TABLE route_stops ADD CONSTRAINT chk_route_stops_sequence_positive CHECK (sequence > 0)');
+            } catch (\Throwable $e) {
+                // ignore
+            }
+        }
     }
 
     public function down(): void

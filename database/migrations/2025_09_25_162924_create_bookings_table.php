@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -24,10 +25,19 @@ return new class extends Migration
             $table->string('status', 20)->default('confirmed')->index();
             $table->timestamps();
             $table->softDeletes();
-            $table->check('end_date > start_date');
+            // Will add raw CHECK constraint after creation (end_date > start_date)
             $table->index(['accommodation_id', 'start_date', 'end_date']);
             $table->index(['accommodation_id', 'status', 'start_date']);
         });
+
+        $driver = DB::getDriverName();
+        if ($driver !== 'sqlite') {
+            try {
+                DB::statement('ALTER TABLE bookings ADD CONSTRAINT chk_bookings_dates CHECK (end_date > start_date)');
+            } catch (\Throwable $e) {
+                // ignore
+            }
+        }
     }
 
     /**

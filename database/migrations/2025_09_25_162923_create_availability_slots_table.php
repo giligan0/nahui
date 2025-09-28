@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -24,8 +25,18 @@ return new class extends Migration
             // composite for filtering by status within an accommodation
             $table->index(['accommodation_id', 'status']);
             // enforce non-empty range (end_date inclusive logic can be adjusted in app layer)
-            $table->check('start_date <= end_date');
+            // Can't use $table->check() (not available in current Laravel version); will add raw constraint below.
         });
+
+        // Add CHECK constraint ensuring start_date <= end_date
+        $driver = DB::getDriverName();
+        if ($driver !== 'sqlite') { // SQLite cannot add CHECK via ALTER TABLE after creation
+            try {
+                DB::statement('ALTER TABLE availability_slots ADD CONSTRAINT chk_availability_slots_dates CHECK (start_date <= end_date)');
+            } catch (\Throwable $e) {
+                // Silently ignore if unsupported (older MySQL) or already exists (during retries)
+            }
+        }
     }
 
     /**

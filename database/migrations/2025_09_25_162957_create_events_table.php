@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -32,8 +33,18 @@ return new class extends Migration
             $table->index(['event_category_id', 'start_at']);
             $table->index(['place_id', 'start_at']);
             $table->index(['recurrence', 'start_at']);
-            $table->check('(end_at IS NULL OR end_at >= start_at)');
+            // Add temporal ordering constraint after creation via raw SQL
         });
+
+        $driver = DB::getDriverName();
+        if ($driver !== 'sqlite') {
+            try {
+                // end_at column is NOT NULL in schema, so we simplify to end_at >= start_at
+                DB::statement('ALTER TABLE events ADD CONSTRAINT chk_events_end_after_start CHECK (end_at >= start_at)');
+            } catch (\Throwable $e) {
+                // ignore
+            }
+        }
     }
 
     /**

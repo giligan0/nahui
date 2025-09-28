@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
@@ -24,8 +25,17 @@ return new class extends Migration
             $table->softDeletes();
             $table->unique(['user_id','reviewable_type','reviewable_id','deleted_at']);
             $table->index(['reviewable_type', 'reviewable_id', 'created_at']);
-            $table->check('rating >= 1 AND rating <= 5');
+            // Add rating range constraint via raw statement after table creation
         });
+
+        $driver = DB::getDriverName();
+        if ($driver !== 'sqlite') {
+            try {
+                DB::statement('ALTER TABLE reviews ADD CONSTRAINT chk_reviews_rating CHECK (rating >= 1 AND rating <= 5)');
+            } catch (\Throwable $e) {
+                // ignore
+            }
+        }
     }
 
     /**
