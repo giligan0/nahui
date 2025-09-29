@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PlaceController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -13,35 +14,50 @@ Route::get('/register', function () {
     return Inertia::render('Auth/Register');
 })->name('register');
 
+Route::middleware('auth')->group(function () {
+    Route::get('/my-hosting', function () {
+        return Inertia::render('Places/Index');
+    })->name('my-hosting'); // middleware opcional para propietarios
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/createpleace', function () {
+        return Inertia::render('Places/Create');
+    })->name('createpleace'); // middleware opcional para propietarios
+});
 //TODO PÁGINAS PRINCIPALES (autenticadas) MENU
 Route::middleware('auth')->group(function () {
 
-    Route::resource('/accommodation_types',\App\Http\Controllers\Accommodation_typesController::class);
+    Route::resource('/accommodation_types',\App\Http\Controllers\AccommodationTypeController::class);
     Route::resource('/accommodations',\App\Http\Controllers\AccommodationController::class);
-    Route::resource('/amenity_categories',\App\Http\Controllers\Amenity_categoryController::class);
+    Route::resource('/amenity_categories',\App\Http\Controllers\AmenityCategoryController::class);
     Route::resource('/amenities',\App\Http\Controllers\AmenityController::class);
-    Route::resource('/accommodation_amenities',\App\Http\Controllers\Accommodation_amenityController::class);
-    Route::resource('/abailability_slots',\App\Http\Controllers\Abailability_slotsController::class);
+    Route::resource('/accommodation_amenities',\App\Http\Controllers\AccommodationAmenityController::class);
+    Route::resource('/abailability_slots',\App\Http\Controllers\AvailabilitySlotController::class);
     Route::resource('/bookings',\App\Http\Controllers\BookingController::class);
-    Route::resource('/place_categories',\App\Http\Controllers\Place_categoryController::class);
+    Route::resource('/place_categories',\App\Http\Controllers\PlaceCategoryController::class);
     Route::resource('/places',\App\Http\Controllers\PlaceController::class);
-    Route::resource('/restaurant_categories',\App\Http\Controllers\Restaurant_categoryController::class);
+    Route::resource('/restaurant_categories',\App\Http\Controllers\RestaurantCategoryController::class);
     Route::resource('/restaurants',\App\Http\Controllers\RestaurantController::class);
     Route::resource('/dishes',\App\Http\Controllers\DishController::class);
-    Route::resource('/dish_restaurants',\App\Http\Controllers\Dish_restaurantsController::class);
-    Route::resource('/event_categories',\App\Http\Controllers\Event_categoryController::class);
+    Route::resource('/dish_restaurants',\App\Http\Controllers\DishRestaurantController::class);
+    Route::resource('/event_categories',\App\Http\Controllers\EventCategoryController::class);
     Route::resource('/events',\App\Http\Controllers\EventController::class);
     Route::resource('/reviews',\App\Http\Controllers\ReviewController::class);
-    Route::resource('/review_answers',\App\Http\Controllers\Review_answerController::class);
-    Route::resource('/review_likes',\App\Http\Controllers\Review_likeController::class);
+    Route::resource('/review_answers',\App\Http\Controllers\ReviewAnswerController::class);
+    Route::resource('/review_likes',\App\Http\Controllers\ReviewLikeController::class);
 
 
 
+// Route::prefix('api')->group(function () {
+//     Route::post('/places', [PlaceController::class, 'apiStore']);
+//     Route::get('/places', [PlaceController::class, 'index']); // paginación
+//     Route::get('/places/{place}', [PlaceController::class, 'show']);
+//     Route::put('/places/{place}', [PlaceController::class, 'update']);
+//     Route::delete('/places/{place}', [PlaceController::class, 'destroy']);
+// });
 
-    
-  Route::get('/createplace', function () {
-    return Inertia::render('ViewProp/CreatePlace');
-})->name('createplace');
+
 
     Route::get('/home', function () {
         return Inertia::render('ViewUser/principal/principal');
@@ -56,9 +72,9 @@ Route::middleware('auth')->group(function () {
     })->name('transporte');
 
     Route::get('/mapa', function () {
-        return Inertia::render('Mapa');
+        return Inertia::render('ViewUser/Mapa/Mapa');
     })->name('mapa');
-    
+
 
 
 
@@ -69,7 +85,7 @@ Route::middleware('auth')->group(function () {
     })->name('location');
 
 
-    
+
 
     // PERFIL DE USUARIO
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

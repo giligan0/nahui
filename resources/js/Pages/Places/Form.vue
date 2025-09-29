@@ -14,7 +14,18 @@ const props = defineProps({
       habitaciones: "",
       capacidad: "",
       reglas: "",
-      imagenes: []
+      precio: "",
+      promocion: "",
+      imagenes: [],
+      // campos extra para Place
+      is_public: true,
+      is_managed: false,
+      place_category_id: null,
+      address_id: null,
+      hours: "",
+      accessibility_notes: "",
+      entrance_fee: "",
+      currency: "USD",
     }),
   },
 });
@@ -24,15 +35,6 @@ const emit = defineEmits(["update:modelValue", "submit"]);
 // Estado local del form
 const form = ref({ ...props.modelValue });
 
-// Si cambian props, actualizamos
-watch(
-  () => props.modelValue,
-  (val) => {
-    form.value = { ...val };
-  }
-);
-
-// Emitir cambios al padre
 watch(
   form,
   (val) => {
@@ -69,12 +71,8 @@ const currentYear = ref(today.getFullYear());
 const selectedDay = ref(null);
 const ocupados = ref({});
 
-const daysInMonth = (month, year) => {
-  return Array.from(
-    { length: new Date(year, month + 1, 0).getDate() },
-    (_, i) => i + 1
-  );
-};
+const daysInMonth = (month, year) =>
+  Array.from({ length: new Date(year, month + 1, 0).getDate() }, (_, i) => i + 1);
 
 const prevMonth = () => {
   if (currentMonth.value === 0) {
@@ -108,15 +106,20 @@ const marcarDisponible = () => {
   if (!selectedDay.value) return;
   const key = `${currentYear.value}-${currentMonth.value}`;
   if (!ocupados.value[key]) return;
-  ocupados.value[key] = ocupados.value[key].filter(
-    (d) => d !== selectedDay.value
-  );
+  ocupados.value[key] = ocupados.value[key].filter((d) => d !== selectedDay.value);
   selectedDay.value = null;
 };
 
 // Guardar
 const handleSubmit = () => {
-  emit("submit", form.value);
+  // Convertimos "nombre" a "name" antes de enviar
+  const payload = {
+    ...form.value,
+    name: form.value.nombre,
+    // opcional: puedes convertir "categoria" a "place_category_id" según tu lógica
+  };
+  console.log("Enviando formulario...", payload);
+  emit("submit", payload);
 };
 </script>
 
@@ -164,7 +167,7 @@ const handleSubmit = () => {
 
     <!-- Reglas -->
     <div class="section section_reglas">
-      <h3 class="sub_title tittle" for="">Reglas y consideraciones</h3>
+      <h3 class="sub_title tittle">Reglas y consideraciones</h3>
       <textarea
         rows="4"
         cols="4"
@@ -174,11 +177,34 @@ const handleSubmit = () => {
       ></textarea>
     </div>
 
-    <!-- Input de imágenes -->
+    <!-- Precios -->
+    <div class="section">
+      <h3>Precios y moneda</h3>
+      <div class="form-grid">
+        <input v-model="form.entrance_fee" placeholder="Precio por noche ($)" />
+        <input v-model="form.currency" placeholder="Moneda (USD, NIO)" />
+        <input v-model="form.promocion" placeholder="Descuento o promociones" />
+      </div>
+    </div>
+
+    <!-- Extra Place Fields -->
+    <div class="section">
+      <h3>Configuración adicional</h3>
+      <div class="form-grid">
+        <label>
+          Público: <input type="checkbox" v-model="form.is_public" />
+        </label>
+        <label>
+          Gestionado: <input type="checkbox" v-model="form.is_managed" />
+        </label>
+        <input v-model="form.hours" placeholder="Horario" />
+        <input v-model="form.accessibility_notes" placeholder="Notas de accesibilidad" />
+      </div>
+    </div>
+
+    <!-- Imágenes -->
     <div class="mi-contenedor-existente">
       <input class="upload-box" type="file" multiple @change="handleFileUpload" />
-
-      <!-- Carrusel -->
       <div class="carousel" v-if="images.length">
         <div
           class="carousel-track"
@@ -190,15 +216,6 @@ const handleSubmit = () => {
         </div>
         <button class="prev" @click="prevSlide">&#10094;</button>
         <button class="next" @click="nextSlide">&#10095;</button>
-      </div>
-    </div>
-
-    <!-- Precios -->
-    <div class="section">
-      <h3>Precios</h3>
-      <div class="form-grid">
-        <input v-model="form.precio" placeholder="Precio por noche ($)" />
-        <input v-model="form.promocion" placeholder="Descuento o promociones" />
       </div>
     </div>
 

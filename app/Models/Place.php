@@ -38,12 +38,15 @@ class Place extends Model
 
     protected $perPage = 20;
 
+    protected $casts = [
+    'imagenes' => 'array',
+];
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
-    protected $fillable = ['name', 'place_category_id', 'description', 'address_id', 'is_public', 'is_managed', 'managing_org_id', 'hours', 'accessibility_notes', 'entrance_fee', 'currency'];
+    protected $fillable = ['name', 'place_category_id', 'description', 'address_id', 'is_public', 'is_managed', 'managing_org_id', 'hours', 'accessibility_notes', 'entrance_fee', 'currency', 'imagenes'];
 
 
     /**
@@ -53,7 +56,7 @@ class Place extends Model
     {
         return $this->belongsTo(\App\Models\Address::class, 'address_id', 'id');
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -61,7 +64,7 @@ class Place extends Model
     {
         return $this->belongsTo(\App\Models\Organization::class, 'managing_org_id', 'id');
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -69,7 +72,7 @@ class Place extends Model
     {
         return $this->belongsTo(\App\Models\PlaceCategory::class, 'place_category_id', 'id');
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -77,7 +80,7 @@ class Place extends Model
     {
         return $this->hasMany(\App\Models\Event::class, 'id', 'place_id');
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -85,5 +88,5 @@ class Place extends Model
     {
         return $this->hasMany(\App\Models\Stop::class, 'id', 'place_id');
     }
-    
+
 }

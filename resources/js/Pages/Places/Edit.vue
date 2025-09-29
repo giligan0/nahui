@@ -1,55 +1,33 @@
 <script setup>
-import { ref, onMounted } from "vue";
-import { useRoute, useRouter } from "vue-router";
-import AlojamientoForm from "./AlojamientoForm.vue";
+import Form from "./Form.vue";
 import axios from "axios";
+import { ref } from "vue";
+import { useRouter, usePage } from "vue-router";
 
-import Dashboard from "../ViewUser/Dashboard.vue";
-Dashboard
-
-const route = useRoute();
 const router = useRouter();
-const alojamiento = ref(null);
+const page = usePage();
 
-onMounted(async () => {
-  try {
-    const { data } = await axios.get(`/api/alojamientos/${route.params.id}`);
-    alojamiento.value = data;
-  } catch (error) {
-    console.error("Error al cargar alojamiento:", error);
-  }
-});
+const place = ref(page.props.place);
 
-const updateAlojamiento = async (data) => {
-  try {
-    const formData = new FormData();
-    for (const key in data) {
-      if (key === "imagenes") {
-        data.imagenes.forEach((file, i) => {
-          formData.append(`imagenes[${i}]`, file);
-        });
-      } else {
-        formData.append(key, data[key]);
-      }
+const updatePlace = async (data) => {
+  const formData = new FormData();
+  for (const key in data) {
+    if (key === "imagenes") {
+      data.imagenes.forEach((file, i) => formData.append(`imagenes[${i}]`, file));
+    } else {
+      formData.append(key, data[key]);
     }
-
-    await axios.post(`/api/alojamientos/${route.params.id}?_method=PUT`, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
-
-    alert("Alojamiento actualizado con éxito");
-    router.push({ name: "alojamientos.index" });
-  } catch (error) {
-    console.error("Error al actualizar alojamiento:", error);
   }
+
+  await axios.post(`/places/${place.value.id}?_method=PUT`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+
+  alert("Lugar actualizado con éxito");
+  router.push({ name: "places.index" });
 };
 </script>
 
 <template>
-    <Dashboard />
-
-  <div v-if="alojamiento">
-    <AlojamientoForm v-model="alojamiento" @submit="updateAlojamiento" />
-  </div>
-  <div v-else>Cargando...</div>
+  <Form v-model="place" @submit="updatePlace" />
 </template>

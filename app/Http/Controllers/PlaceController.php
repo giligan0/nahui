@@ -3,82 +3,72 @@
 namespace App\Http\Controllers;
 
 use App\Models\Place;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Requests\PlaceRequest;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class PlaceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Request $request): View
+    public function index(Request $request): Response
     {
-        $places = Place::paginate();
-
-        return view('place.index', compact('places'))
-            ->with('i', ($request->input('page', 1) - 1) * $places->perPage());
+        $places = Place::paginate(10);
+        return Inertia::render('Places/Index', [
+            'places' => $places,
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(): View
+    public function create(): Response
     {
-        $place = new Place();
-
-        return view('place.create', compact('place'));
+        return Inertia::render('Places/Create', [
+            'place' => new Place(),
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(PlaceRequest $request): RedirectResponse
+    public function store(PlaceRequest $request)
     {
-        Place::create($request->validated());
+        $data = $request->validated();
 
-        return Redirect::route('places.index')
-            ->with('success', 'Place created successfully.');
+        if ($request->hasFile('imagenes')) {
+            $imagenes = [];
+            foreach ($request->file('imagenes') as $file) {
+                $imagenes[] = $file->store('places', 'public');
+            }
+            $data['imagenes'] = $imagenes;
+        }
+
+        Place::create($data);
+
+        return redirect()->route('places.index')->with('success','Lugar creado con éxito');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show($id): View
+    public function edit(Place $place)
     {
-        $place = Place::find($id);
-
-        return view('place.show', compact('place'));
+        return Inertia::render('Places/Edit', [
+            'place' => $place,
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id): View
+    public function update(PlaceRequest $request, Place $place)
     {
-        $place = Place::find($id);
+        $data = $request->validated();
 
-        return view('place.edit', compact('place'));
+        if ($request->hasFile('imagenes')) {
+            $imagenes = $place->imagenes ?? [];
+            foreach ($request->file('imagenes') as $file) {
+                $imagenes[] = $file->store('places', 'public');
+            }
+            $data['imagenes'] = $imagenes;
+        }
+
+        $place->update($data);
+
+        return redirect()->route('places.index')->with('success','Lugar actualizado con éxito');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(PlaceRequest $request, Place $place): RedirectResponse
+    public function destroy(Place $place)
     {
-        $place->update($request->validated());
-
-        return Redirect::route('places.index')
-            ->with('success', 'Place updated successfully');
-    }
-
-    public function destroy($id): RedirectResponse
-    {
-        Place::find($id)->delete();
-
-        return Redirect::route('places.index')
-            ->with('success', 'Place deleted successfully');
+        $place->delete();
+        return redirect()->route('places.index')->with('success','Lugar eliminado con éxito');
     }
 }
