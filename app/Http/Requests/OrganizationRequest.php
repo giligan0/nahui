@@ -22,6 +22,7 @@ class OrganizationRequest extends FormRequest
     public function rules(): array
     {
         return [
+<<<<<<< HEAD
             'name' => 'required|string|max:255|min:3',
             'type' => 'required|string|max:100|min:3',
             'contact_info' => 'required|string|max:255|min:3',
@@ -57,6 +58,12 @@ class OrganizationRequest extends FormRequest
             'website.string' => 'El sitio web solo permite caracteres.',
             'website.max' => 'El sitio web no puede tener mas de 255 caracteres.',
             'website.min' => 'El sitio web debe tener almenos 3 caracteres.',
+=======
+			'name' => 'required|string',
+			'contact_email' => 'string',
+			'contact_phone' => 'string',
+			'website' => 'string',
+>>>>>>> origin/autocrud
         ];
     }
 }
