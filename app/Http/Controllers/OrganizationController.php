@@ -3,73 +3,82 @@
 namespace App\Http\Controllers;
 
 use App\Models\Organization;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use App\Http\Requests\OrganizationRequest;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
 
 class OrganizationController extends Controller
-
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request): View
     {
-        $organizations = Organization::latest()->paginate(10);
-        return view('organizations.index',compact('organizations'));
+        $organizations = Organization::paginate();
+
+        return view('organization.index', compact('organizations'))
+            ->with('i', ($request->input('page', 1) - 1) * $organizations->perPage());
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
-        $organizations= new Organization();
-        return view('organizations.create',compact('organizations'));
+        $organization = new Organization();
+
+        return view('organization.create', compact('organization'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(OrganizationRequest $request)
+    public function store(OrganizationRequest $request): RedirectResponse
     {
-        Organization::create ($request->validated());
-        return redirect()->route('organizations.index')->with('success','Organización ha sido creada con éxito');
+        Organization::create($request->validated());
+
+        return Redirect::route('organizations.index')
+            ->with('success', 'Organization created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show($id): View
     {
-        $organizations= Organization::find($id);
-        return view('organizations.show',compact('organizations'));
+        $organization = Organization::find($id);
+
+        return view('organization.show', compact('organization'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(int $id)
+    public function edit($id): View
     {
-        $organizations= Organization::find($id);
-        return view ('Organizations.edit',compact('organizations'));
+        $organization = Organization::find($id);
+
+        return view('organization.edit', compact('organization'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(OrganizationRequest $request, int $id)
+    public function update(OrganizationRequest $request, Organization $organization): RedirectResponse
     {
-        $organizations= Organization::find($id);
-        $organizations->update($request->validated());
-        return redirect()->route('organizations.index')->with('updated','Organización ha sido actualizado con éxito');
+        $organization->update($request->validated());
+
+        return Redirect::route('organizations.index')
+            ->with('success', 'Organization updated successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(int $id)
+    public function destroy($id): RedirectResponse
     {
-        $organizations= Organization::find($id);
-        $organizations->delete();
-        return redirect()->route('organizations.index')->with('deleted','Organización ha sido eliminado con éxito');
+        Organization::find($id)->delete();
+
+        return Redirect::route('organizations.index')
+            ->with('success', 'Organization deleted successfully');
     }
 }
-

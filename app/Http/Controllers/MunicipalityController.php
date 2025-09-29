@@ -2,77 +2,83 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Municipality;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use App\Http\Requests\MunicipalityRequest;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
 
 class MunicipalityController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request): View
     {
-        $municipalities= Municipality::with ('department')->paginate(10);
-        return view ('municipalities.index',compact('municipalities'));
+        $municipalities = Municipality::paginate();
+
+        return view('municipality.index', compact('municipalities'))
+            ->with('i', ($request->input('page', 1) - 1) * $municipalities->perPage());
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
-        $municipalities= new Municipality();
-        $departments= Department::all();
-        return view ('municipalities.create',compact('municipality','deapartments'));
+        $municipality = new Municipality();
+
+        return view('municipality.create', compact('municipality'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(MunicipalityRequest $request)
+    public function store(MunicipalityRequest $request): RedirectResponse
     {
         Municipality::create($request->validated());
-        return redirect()->route('mumicipalities.index')->with('success','Municipio ha sido creado con éxito');
+
+        return Redirect::route('municipalities.index')
+            ->with('success', 'Municipality created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show($id): View
     {
-        $municipalities= Municipality::find($id);
-        $department= Department::all();
-        return view ('municipalities.show',compact('municipalities','departments'));
+        $municipality = Municipality::find($id);
+
+        return view('municipality.show', compact('municipality'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(int $id)
+    public function edit($id): View
     {
-        $municipalities= Municipality::find($id);
-        $departments= Department::all();
-        return view ('municipalities.edit',compact('municipalities','departments'));
+        $municipality = Municipality::find($id);
 
+        return view('municipality.edit', compact('municipality'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(MunicipalityRequest $request, int $id)
+    public function update(MunicipalityRequest $request, Municipality $municipality): RedirectResponse
     {
-        $municipalities= Municipality::find($id);
-        $municipalities->update($request->validated());
-        return redirect()->route('municipalities.index')->with('updated','Municipio ha sido actualizado con éxito');
+        $municipality->update($request->validated());
+
+        return Redirect::route('municipalities.index')
+            ->with('success', 'Municipality updated successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(int $id)
+    public function destroy($id): RedirectResponse
     {
-        $municipalities= Municipality::find($id);
-        $municipalities->delete();
-        return redirect()->route('municipalities.index')->with('deleted','Municipio ha sido eliminado con éxito');
+        Municipality::find($id)->delete();
+
+        return Redirect::route('municipalities.index')
+            ->with('success', 'Municipality deleted successfully');
     }
 }

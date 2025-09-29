@@ -2,73 +2,83 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Address;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use App\Http\Requests\AddressRequest;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
 
 class AddressController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request): View
     {
-        $addresses = Address::latest()->paginate(10);
-        return view('addresses.index',compact('addresses'));
+        $addresses = Address::paginate();
+
+        return view('address.index', compact('addresses'))
+            ->with('i', ($request->input('page', 1) - 1) * $addresses->perPage());
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
-        $addresses= new Address();
-        return view('addresses.create',compact('addresses'));
+        $address = new Address();
+
+        return view('address.create', compact('address'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(AddressRequest $request)
+    public function store(AddressRequest $request): RedirectResponse
     {
-        Address::create ($request->validated());
-        return redirect()->route('addresses.index')->with('success','Dirección ha sido creado con éxito');
+        Address::create($request->validated());
+
+        return Redirect::route('addresses.index')
+            ->with('success', 'Address created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show($id): View
     {
-        $addresses= Address::find($id);
-        return view('addresses.show',compact('addresses'));
+        $address = Address::find($id);
+
+        return view('address.show', compact('address'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(int $id)
+    public function edit($id): View
     {
-        $addresses= Address::find($id);
-        return view ('addresses.edit',compact('addresses'));
+        $address = Address::find($id);
+
+        return view('address.edit', compact('address'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(AddressRequest $request, int $id)
+    public function update(AddressRequest $request, Address $address): RedirectResponse
     {
-        $addresses= Address::find($id);
-        $addresses->update($request->validated());
-        return redirect()->route('addresses.index')->with('success','Dirección ha sido actualizado con éxito');
+        $address->update($request->validated());
+
+        return Redirect::route('addresses.index')
+            ->with('success', 'Address updated successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(int $id)
+    public function destroy($id): RedirectResponse
     {
-        $addresses= Address::find($id);
-        $addresses->delete();
-        return redirect()->route('addresses.index')->with('success','Dirección ha sido eliminado con éxito');
-    }
+        Address::find($id)->delete();
 
+        return Redirect::route('addresses.index')
+            ->with('success', 'Address deleted successfully');
+    }
 }

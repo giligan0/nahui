@@ -2,79 +2,83 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Accommodation;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use App\Http\Requests\AccommodationRequest;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
 
 class AccommodationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request): View
     {
-        $accommodations= Accommodation::with ('organization','address')->paginate(10);
-        return view ('accommodations.index',compact('accommodations'));
+        $accommodations = Accommodation::paginate();
+
+        return view('accommodation.index', compact('accommodations'))
+            ->with('i', ($request->input('page', 1) - 1) * $accommodations->perPage());
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
-        $accommodations= new Accommodation();
-        $organizations= Organization::all();
-        $addresses= Address::all();
-        return view ('accommodations.create',compact('accommodations','organizations','addresses'));
+        $accommodation = new Accommodation();
+
+        return view('accommodation.create', compact('accommodation'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(AccommodationRequest $request)
+    public function store(AccommodationRequest $request): RedirectResponse
     {
         Accommodation::create($request->validated());
-        return redirect()->route('accommodations.index')->with('success','Alojamientos ha sido creado con éxito');
+
+        return Redirect::route('accommodations.index')
+            ->with('success', 'Accommodation created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show($id): View
     {
-        $accommodations= Accommodation::find($id);
-        $organizations= Organization::all();
-        $addresses= Address::all();
-        return view ('accommodations.show',compact('accommodations','organizations','addresses'));
+        $accommodation = Accommodation::find($id);
+
+        return view('accommodation.show', compact('accommodation'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(int $id)
+    public function edit($id): View
     {
-        $accommodations= Accommodation::find($id);
-        $organizations= Organization::all();
-        $addresses= Address::all();
-        return view ('accommodations.edit',compact('accommodations','organizations','addresses'));
+        $accommodation = Accommodation::find($id);
 
+        return view('accommodation.edit', compact('accommodation'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(AccommodationRequest $request, int $id)
+    public function update(AccommodationRequest $request, Accommodation $accommodation): RedirectResponse
     {
-        $accommodations= Accommodation::find($id);
-        $accommodations->update($request->validated());
-        return redirect()->route('accommodations.index')->with('updated','Alojamientos ha sido actualizado con éxito');
+        $accommodation->update($request->validated());
+
+        return Redirect::route('accommodations.index')
+            ->with('success', 'Accommodation updated successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(int $id)
+    public function destroy($id): RedirectResponse
     {
-        $accommodations= Accommodation::find($id);
-        $accommodations->delete();
-        return redirect()->route('accommodations.index')->with('deleted','Alojamientos ha sido eliminado con éxito');
+        Accommodation::find($id)->delete();
+
+        return Redirect::route('accommodations.index')
+            ->with('success', 'Accommodation deleted successfully');
     }
 }

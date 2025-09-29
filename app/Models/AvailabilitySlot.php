@@ -4,34 +4,40 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class AvailabilitySlot
+ *
+ * @property $id
+ * @property $accommodation_id
+ * @property $start_date
+ * @property $end_date
+ * @property $status
+ * @property $created_at
+ * @property $updated_at
+ *
+ * @property Accommodation $accommodation
+ * @package App
+ * @mixin \Illuminate\Database\Eloquent\Builder
+ */
 class AvailabilitySlot extends Model
 {
-    protected $fillable = [
-        'accommodation_id', 'start_date', 'end_date', 'status'
-    ];
+    
+    protected $perPage = 20;
 
-    protected $casts = [
-        'start_date' => 'date',
-        'end_date' => 'date',
-    ];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = ['accommodation_id', 'start_date', 'end_date', 'status'];
 
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function accommodation()
     {
-        return $this->belongsTo(Accommodation::class);
+        return $this->belongsTo(\App\Models\Accommodation::class, 'accommodation_id', 'id');
     }
-
-    public function scopeForAccommodation($query, $accommodationId)
-    {
-        return $query->where('accommodation_id', $accommodationId);
-    }
-
-    public static function overlaps(int $accommodationId, $startDate, $endDate): bool
-    {
-        return static::forAccommodation($accommodationId)
-            ->where(function($q) use ($startDate, $endDate) {
-                $q->where('start_date', '<', $endDate)
-                  ->where('end_date', '>', $startDate);
-            })
-            ->exists();
-    }
+    
 }

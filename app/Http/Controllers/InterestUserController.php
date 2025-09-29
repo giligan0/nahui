@@ -2,72 +2,83 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\InterestUser;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use App\Http\Requests\InterestUserRequest;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
 
 class InterestUserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request): View
     {
-        $interestusers = InterestUser::latest()->paginate(10);
-        return view('interestusers.index',compact('interestusers'));
+        $interestUsers = InterestUser::paginate();
+
+        return view('interest-user.index', compact('interestUsers'))
+            ->with('i', ($request->input('page', 1) - 1) * $interestUsers->perPage());
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
-        $interestusers= new InterestUser();
-        return view('interestusers.create',compact('interestusers'));
+        $interestUser = new InterestUser();
+
+        return view('interest-user.create', compact('interestUser'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(InterestUserRequest $request)
+    public function store(InterestUserRequest $request): RedirectResponse
     {
-        InterestUser::create ($request->validated());
-        return redirect()->route('interestusers.index')->with('success','Interes de usuario creado con éxito');
+        InterestUser::create($request->validated());
+
+        return Redirect::route('interest-users.index')
+            ->with('success', 'InterestUser created successfully.');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(int $id)
+    public function show($id): View
     {
-        $interestusers= InterestUser::find($id);
-        return view('interestusers.show',compact('interestusers'));
+        $interestUser = InterestUser::find($id);
+
+        return view('interest-user.show', compact('interestUser'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(int $id)
+    public function edit($id): View
     {
-        $interestusers= InterestUser::find($id);
-        return view ('interestusers.edit',compact('interestusers'));
+        $interestUser = InterestUser::find($id);
+
+        return view('interest-user.edit', compact('interestUser'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(InterestUserRequest $request, int $id)
+    public function update(InterestUserRequest $request, InterestUser $interestUser): RedirectResponse
     {
-        $interestusers= InterestUser::find($id);
-        $interestusers->update($request->validated());
-        return redirect()->route('interestusers.index')->with('success','Interes de usuario actualizado con éxito');
+        $interestUser->update($request->validated());
+
+        return Redirect::route('interest-users.index')
+            ->with('success', 'InterestUser updated successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(int $id)
+    public function destroy($id): RedirectResponse
     {
-        $interestusers= InterestUser::find($id);
-        $interestusers->delete();
-        return redirect()->route('interestusers.index')->with('success','Interes de usuario eliminado con éxito');
+        InterestUser::find($id)->delete();
+
+        return Redirect::route('interest-users.index')
+            ->with('success', 'InterestUser deleted successfully');
     }
 }
