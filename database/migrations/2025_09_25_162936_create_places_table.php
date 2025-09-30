@@ -15,6 +15,8 @@ return new class extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->foreignId('place_category_id')->nullable()->constrained('place_categories')->nullOnDelete();
+                $table->json('imagenes')->nullable();
+
             $table->text('description')->nullable();
             $table->foreignId('address_id')->nullable()->constrained()->nullOnDelete();
             $table->boolean('is_public')->default(true)->index();

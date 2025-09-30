@@ -25,12 +25,12 @@
           :key="i"
           class="card"
           @click="goToPlace(lugar)"
-        >
-          <img :src="lugar.imagen" :alt="lugar.titulo" />
-          <div class="card-body">
-            <h3>{{ lugar.titulo }}</h3>
-            <p>{{ lugar.descripcion }}</p>
-          </div>
+                        >
+                        <img :src="lugar.imagen" :alt="lugar.titulo" />
+          <div class="card-body" >
+              <h3>{{ lugar.titulo }}</h3>
+              <p>{{ lugar.descripcion }}</p>
+            </div>
         </div>
       </div>
     </div>
@@ -41,7 +41,7 @@
 import { ref } from "vue";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import Dashboard from '@/Pages/Dashboard.vue';
+import Dashboard from '@/Pages/ViewUser/Dashboard.vue';
 
 Dashboard
 
