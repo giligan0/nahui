@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 
 use App\Models\InterestUser;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use App\Http\Requests\InterestUserRequest;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
