@@ -1,48 +1,44 @@
 <script setup>
-import { ref, watch } from 'vue'
-import { usePage, Link } from '@inertiajs/vue3'
-import { Inertia } from '@inertiajs/inertia'
-import route from 'ziggy-js' // ✅ importación correcta
+import { ref, watch } from 'vue';
+import { usePage, Link } from '@inertiajs/vue3';
+import { Inertia } from '@inertiajs/inertia';
+import Dashboard from "../ViewUser/Dashboard.vue"; // Ajusta la ruta según tu estructura
 
 // Obtener los lugares desde Inertia
-const page = usePage()
-const places = ref(page.props.places.data)
+const page = usePage();
+const places = ref(page.props.places?.data || []);
 
 // Actualizar lugares si cambian dinámicamente
-watch(
-  () => page.props.places.data,
-  (val) => (places.value = val)
-)
+watch(() => page.props.places?.data, (val) => { places.value = val; });
 
 // Función para editar lugar
 const editPlace = (id) => {
-  Inertia.get(route('places.edit', id)) // ✅ usamos ziggy con nombre de ruta
-}
+  Inertia.get(`/places/${id}/edit`);
+};
 
 // Función para eliminar lugar
 const deletePlace = (id) => {
   if (confirm('¿Deseas eliminar este lugar?')) {
-    Inertia.delete(route('places.destroy', id), {
+    Inertia.delete(`/places/${id}`, {
       onSuccess: () => alert('Lugar eliminado con éxito'),
-    })
+    });
   }
-}
+};
 </script>
 
 <template>
+  <Dashboard />
   <div class="container mx-auto p-6">
-    <!-- Header con botón crear -->
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-3xl font-bold">Mis Lugares</h1>
       <Link
-        :href="route('places.create')" 
+        href="/createpleace"
         class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
       >
         Crear nuevo lugar
       </Link>
     </div>
 
-    <!-- Tabla de lugares -->
     <div class="overflow-x-auto bg-white shadow rounded-lg">
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-100">
@@ -67,27 +63,6 @@ const deletePlace = (id) => {
           </tr>
         </tbody>
       </table>
-    </div>
-
-    <!-- Paginación simple -->
-    <div class="mt-4 flex justify-end space-x-2">
-      <button
-        v-if="page.props.places.prev_page_url"
-        @click="Inertia.get(page.props.places.prev_page_url)"
-        class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
-      >
-        Anterior
-      </button>
-      <span class="px-3 py-1 bg-gray-100 rounded">
-        Página {{ page.props.places.current_page }} de {{ page.props.places.last_page }}
-      </span>
-      <button
-        v-if="page.props.places.next_page_url"
-        @click="Inertia.get(page.props.places.next_page_url)"
-        class="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300"
-      >
-        Siguiente
-      </button>
     </div>
   </div>
 </template>

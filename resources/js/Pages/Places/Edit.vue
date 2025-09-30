@@ -1,16 +1,20 @@
 <script setup>
-import Form from "./Form.vue";
-import axios from "axios";
 import { ref } from "vue";
-import { useRouter, usePage } from "vue-router";
+import { Inertia } from '@inertiajs/inertia';
+import AlojamientoForm from "./Form.vue";
+import Dashboard from "../ViewUser/Dashboard.vue";
 
-const router = useRouter();
-const page = usePage();
+Dashboard;
 
-const place = ref(page.props.place);
+const props = defineProps({
+  place: Object
+});
 
-const updatePlace = async (data) => {
+const alojamiento = ref({ ...props.place });
+
+const updateAlojamiento = (data) => {
   const formData = new FormData();
+
   for (const key in data) {
     if (key === "imagenes") {
       data.imagenes.forEach((file, i) => formData.append(`imagenes[${i}]`, file));
@@ -19,15 +23,22 @@ const updatePlace = async (data) => {
     }
   }
 
-  await axios.post(`/places/${place.value.id}?_method=PUT`, formData, {
-    headers: { "Content-Type": "multipart/form-data" },
+  Inertia.post(`/places/${alojamiento.value.id}`, formData, {
+    method: 'put',
+    preserveScroll: true,
+    onSuccess: () => {
+      alert("Lugar actualizado con éxito");
+      Inertia.get('/my-hosting');
+    },
+    onError: (errors) => {
+      console.error(errors);
+      alert("Error al actualizar alojamiento");
+    }
   });
-
-  alert("Lugar actualizado con éxito");
-  router.push({ name: "places.index" });
 };
 </script>
 
 <template>
-  <Form v-model="place" @submit="updatePlace" />
+  <Dashboard />
+  <AlojamientoForm v-model="alojamiento" @submit="updateAlojamiento" />
 </template>

@@ -11,7 +11,7 @@
         <ul>
           <li>
             <Link
-              :href="route('home')"
+              href="/home"
               :class="{ active: $page.url.startsWith('/home') }"
               preserve-state
               preserve-scroll
@@ -22,18 +22,18 @@
           </li>
           <li>
             <Link
-              :href="route('places.index')"
-              :class="{ active: $page.url.startsWith('/places') }"
+              href="/place"
+              :class="{ active: $page.url.startsWith('/place') }"
               preserve-state
               preserve-scroll
               prefetch
             >
-              Lugares
+              Mis Lugares
             </Link>
           </li>
           <li>
             <Link
-              :href="route('transporte')"
+              href="/transporte"
               :class="{ active: $page.url.startsWith('/transporte') }"
               preserve-state
               preserve-scroll
@@ -44,7 +44,7 @@
           </li>
           <li>
             <Link
-              :href="route('mapa')"
+              href="/mapa"
               :class="{ active: $page.url.startsWith('/mapa') }"
               preserve-state
               preserve-scroll
@@ -56,7 +56,7 @@
 
           <!-- Solo para propietarios -->
           <li v-if="$page.props.auth.user && $page.props.auth.user.role === 'host'">
-            <Link :href="route('places.index')">Mi Hospedaje</Link>
+            <Link href="/my-hosting">Mi Hospedaje</Link>
           </li>
         </ul>
       </nav>
@@ -98,41 +98,23 @@ import { Link } from "@inertiajs/vue3";
 import { Inertia } from "@inertiajs/inertia";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import { faBars, faTimes, faBell, faUserCircle } from "@fortawesome/free-solid-svg-icons";
-import route from "ziggy-js"; // ✅ para usar nombres de rutas de Laravel
 import logo from "../Multimedia/Recurso 3.png";
 
 const isMenuOpen = ref(false);
 const isDropdownOpen = ref(false);
 
-const toggleMenu = () => {
-  isMenuOpen.value = !isMenuOpen.value;
-};
-
-const toggleDropdown = () => {
-  isDropdownOpen.value = !isDropdownOpen.value;
-};
+const toggleMenu = () => { isMenuOpen.value = !isMenuOpen.value; };
+const toggleDropdown = () => { isDropdownOpen.value = !isDropdownOpen.value; };
 
 const logout = () => {
-  Inertia.post(route("logout")); // ✅ usa la ruta de logout de Laravel
+  Inertia.post('/logout'); // ❌ Rutas normales
 };
 
-// cerrar dropdown si clic fuera
 const handleClickOutside = (e) => {
   const dropdown = document.querySelector(".icons .relative");
-  if (dropdown && !dropdown.contains(e.target)) {
-    isDropdownOpen.value = false;
-  }
+  if (dropdown && !dropdown.contains(e.target)) isDropdownOpen.value = false;
 };
 
-onMounted(() => {
-  document.addEventListener("click", handleClickOutside);
-});
-
-onBeforeUnmount(() => {
-  document.removeEventListener("click", handleClickOutside);
-});
+onMounted(() => document.addEventListener("click", handleClickOutside));
+onBeforeUnmount(() => document.removeEventListener("click", handleClickOutside));
 </script>
-
-<style scoped>
-
-</style>

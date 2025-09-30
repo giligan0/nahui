@@ -160,20 +160,27 @@ onMounted(() => {
 // Lugales turisticos
 const healthCenters = ref([
   {
-    name: "Hotel el uyuyui",
+    name: "Hotel el panorama",
     type: "hoteles",
-    description: "El mejor hotel para el uyuyuy.",
+    description: "El mejor hotel para el relajarse.",
     coords: [13.092342505542677, -86.36620962999297],
     image: "/imagenes/lugarTuristic.jfif",
   },
 
   {
-    name: "Hotel el uyuyui",
+    name: "Hotel bella vista",
     type: "hoteles",
-    description: "El mejor hotel para el uyuyuy.",
-    coords: [13.092342505542644, -86.36620962999298],
-    image: "/imagenes/lugarTuristic.jfif",
+    description: "El mejor hotel para el descansar.",
+    coords: [13.085054690132045, -86.35521543064404],
+    image: "/imagenes/htoel2.jfif",
   },
+  {
+   name: "Restaurante el gustazo",
+    type: "restaurantes",
+    description: "El mejor restaurante para el cenar.",
+    coords: [13.09393469507082, -86.35336005802834],
+    image: "/imagenes/res.jfif",
+  }
 ]);
 
 

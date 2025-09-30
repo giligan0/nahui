@@ -1,14 +1,9 @@
 <template>
-<Dashboard />
-<MainDash />
+  <Dashboard />
+  <MainDash />
 </template>
 
-<script>
+<script setup>
 import Dashboard from '../Dashboard.vue';
 import MainDash from '../MainDash.vue';
-
-
-Dashboard
-MainDash
-
 </script>
