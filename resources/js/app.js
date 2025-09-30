@@ -23,7 +23,7 @@
     // Tus estilos SCSS
     import '../js/scss/Principal.scss';
     import '../js/scss/UserStyle/Mapa.scss';
-    import '../js/scss/Variables.scss';
+    // import '../js/scss/Variables.scss';
     import '../js/scss/UserStyle/location.scss';
     import '../js/scss/ViewProp/CreatePlace.scss';
 
@@ -38,7 +38,7 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
             .use(plugin)
-             .use(ZiggyVue) 
+             .use(ZiggyVue)
             .component('font-awesome-icon', FontAwesomeIcon)
             .mount(el);
     },
