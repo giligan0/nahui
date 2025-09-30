@@ -79,7 +79,7 @@ class Stop extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function busRoutes()
+    public function busRoute()
     {
         return $this->hasMany(\App\Models\BusRoute::class, 'id', 'origin_stop_id');
     }

@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 use App\Models\Department;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use App\Http\Requests\DepartmentRequest;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;

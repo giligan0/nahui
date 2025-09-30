@@ -3,9 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Organization;
-
-class OrganizationController extends Controller
-
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Requests;
 use App\Http\Requests\OrganizationRequest;
@@ -13,7 +10,6 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
 class OrganizationController extends Controller
-
 {
     /**
      * Display a listing of the resource.

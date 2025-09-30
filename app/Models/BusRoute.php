@@ -77,7 +77,7 @@ class BusRoute extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function stop()
+    public function stops()
     {
         return $this->belongsTo(\App\Models\Stop::class, 'origin_stop_id', 'id');
     }

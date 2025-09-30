@@ -4,10 +4,7 @@ namespace App\Http\Controllers;
 
 
 use Illuminate\Http\Request;
-
-class InterestController extends Controller
-
-use App\Models\Interests;
+use App\Models\Interest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Requests;
 use App\Http\Requests\InterestRequest;
@@ -15,6 +12,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
 class InterestController extends Controller
+
 {
     /**
      * Display a listing of the resource.

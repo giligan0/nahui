@@ -5,10 +5,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Municipality;
-
-use App\Models\Municipality;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use App\Http\Requests\MunicipalityRequest;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
