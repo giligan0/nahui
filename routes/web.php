@@ -20,11 +20,29 @@ Route::middleware('auth')->group(function () {
     })->name('my-hosting'); // middleware opcional para propietarios
 });
 
+// use App\Http\Controllers\PlaceController;
+
+
 Route::middleware('auth')->group(function () {
-    Route::get('/createpleace', function () {
-        return Inertia::render('Places/Create');
-    })->name('createpleace'); // middleware opcional para propietarios
+
+    // Lista de lugares
+    Route::get('/my-hosting', [PlaceController::class, 'index'])->name('my-hosting');
+
+    // Crear nuevo lugar
+    Route::get('/createpleace', [PlaceController::class, 'create'])->name('createpleace');
+    Route::post('/createpleace', [PlaceController::class, 'store'])->name('createpleace.store');
+
+    // Editar lugar
+    Route::get('/places/{id}/edit', [PlaceController::class, 'edit'])->name('places.edit');
+    Route::put('/places/{id}', [PlaceController::class, 'update'])->name('places.update');
+
+    // Eliminar lugar
+    Route::delete('/places/{id}', [PlaceController::class, 'destroy'])->name('places.destroy');
 });
+
+// use App\Http\Controllers\PlaceController;
+
+
 //TODO PÁGINAS PRINCIPALES (autenticadas) MENU
 Route::middleware('auth')->group(function () {
 
