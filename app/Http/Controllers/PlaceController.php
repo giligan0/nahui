@@ -2,91 +2,59 @@
 
 namespace App\Http\Controllers;
 
-
-
-use Illuminate\Http\Request;
 use App\Models\Place;
-use Illuminate\Http\Requests;
+use App\Models\Organization;
+use App\Models\Address;
 use App\Http\Requests\PlaceRequest;
-
+use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class PlaceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $places= Place::with ('organization','address')->paginate(10);
-        return view ('places.index',compact('places'));
-}
-
-    /**
-     * Show the form for creating a new resource.
-     */
+        $places = Place::with('organization', 'address')->paginate(10);
+        return Inertia::render('Places/Index', [
+            'places' => $places
+        ]);
+    }
 
     public function create()
     {
-        $places= new Place();
-        $organizations= Organization::all();
-        $addresses= Address::all();
-        return view ('places.create',compact('places','organizations','addresses'));
-}
+        $organizations = Organization::all();
+        $addresses = Address::all();
 
-
-    /**
-     * Store a newly created resource in storage.
-     */
+        return Inertia::render('Places/Create', [
+            'organizations' => $organizations,
+            'addresses' => $addresses
+        ]);
+    }
 
     public function store(PlaceRequest $request)
     {
         Place::create($request->validated());
-        return redirect()->route('places.index')->with('success','Lugares ha sido creado con éxito');
-}
-   
-    /**
-     * Display the specified resource.
-     */
-
-    public function show(int $id)
-    {
-        $places= Place::find($id);
-        $organizations= Organization::all();
-        $addresses= Address::all();
-        return view ('places.show',compact('places','organizations','addresses'));
-}
-    /**
-     * Show the form for editing the specified resource.
-     */
-
-
-
-    public function edit($id): View
-    {
-        $place = Place::find($id);
-
-        return view('place.edit', compact('place'));
+        return redirect()->route('places.index')->with('success', 'Lugar creado con éxito');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-
-    public function update(PlaceRequest $request, int $id)
+    public function edit($id)
     {
-        $places= Place::find($id);
-        $places->update($request->validated());
-        return redirect()->route('places.index')->with('updated','Lugares ha sido actualizado con éxito');
+        $place = Place::findOrFail($id);
+        return Inertia::render('Places/Edit', [
+            'place' => $place
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(int $id)
+    public function update(PlaceRequest $request, $id)
     {
-        $places= Place::find($id);
-        $places->delete();
-        return redirect()->route('places.index')->with('deleted','Lugares ha sido eliminado con éxito');
-}
-   
+        $place = Place::findOrFail($id);
+        $place->update($request->validated());
+        return redirect()->route('places.index')->with('success', 'Lugar actualizado con éxito');
+    }
+
+    public function destroy($id)
+    {
+        $place = Place::findOrFail($id);
+        $place->delete();
+        return redirect()->route('places.index')->with('deleted', 'Lugar eliminado con éxito');
+    }
 }
